@@ -1,24 +1,47 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+let URL = "https://randomuser.me/api/?results=10";
 
 function App() {
+  const [ users, setUsers ] = useState([]);
+
+  // Using only fetch function;
+  // const fetchData = () => {
+  //   fetch(URL) 
+  //     .then( response => response.json())
+  //     .then( data => setUsers(data.results))
+  //     .catch(error => console.log(error))
+  // }
+
+  // Using Async Await Method;
+  const fetchData = async () => {
+      const response = await fetch(URL);
+      const data = await response.json();
+      setUsers(data.results);
+  }
+  
+  useEffect(() => {
+    fetchData()
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <h1>Random Users</h1>
+      <ul>
+        {
+          users.map( user => {
+            return (
+              <li key={user.name.first}>
+                <img src={user.picture.thumbnail} alt={user.name.first} />
+                <p>
+                  { user.email } 
+                </p>
+              </li>
+            )
+          })
+        }
+      </ul>
+    </>
   );
 }
 
